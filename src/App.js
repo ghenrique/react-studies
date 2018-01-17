@@ -13,6 +13,8 @@ class App extends Component {
 			{ name: 'Stephanie', age: 26 },
 		],
 
+		showPersons: false,
+
 		texts: [
 			{ username: 'user1', title: 'Title 1', description: 'Desc 1' },
 			{ username: 'user2', title: 'Title 2', description: 'Desc 2' }
@@ -32,6 +34,7 @@ class App extends Component {
 		});
 	}
 
+	// Updating name from input data
 	nameChangedHandler = (event) => {
 		this.setState({
 			persons: [
@@ -42,6 +45,16 @@ class App extends Component {
 		});
 	}
 
+	// Show persons when action is taken
+	togglePersonsHandler = () => {
+		const doesShow = this.state.showPersons; // Set doesShow variable, with the value of showPersons
+		
+		this.setState({
+			showPersons: !doesShow // Change the state of showPersons to the inverse value
+		});
+	}
+
+	// Change the username from input data
 	changeUsernameHandler = (event) => {
 		this.setState({
 			texts: [
@@ -70,14 +83,6 @@ class App extends Component {
 			cursor: 'pointer'
 		};
 
-		const textStyles = {
-			width: '80%',
-			margin: '30px auto 20px',
-			padding: '20px',
-			backgroundColor: 'grey',
-			color: 'white'
-		}
-
 		return (
 			<div className="App">
 				<h1>Test React</h1>
@@ -86,22 +91,28 @@ class App extends Component {
 				{/* Defining button and behavior */}
 				<button 
 					style={ style }
-					onClick={() => this.switchNameHandler('Maximilian!!')}>Switch Name</button>
+					onClick={this.togglePersonsHandler}>Switch Name</button>
 
-				{/* Setting and importing components */}
-				<Person
-					name={this.state.persons[0].name}
-					age={this.state.persons[0].age} />
+				{
+					this.state.showPersons ?
+						<section className="PersonsList">
+							{/* Setting and importing components */}
+							<Person
+								name={this.state.persons[0].name}
+								age={this.state.persons[0].age} />
 
-				<Person
-					name={this.state.persons[1].name}
-					age={this.state.persons[1].age}
-					click={this.switchNameHandler.bind(this, 'Max!')}
-					changed={this.nameChangedHandler}>My Hobbies: racing</Person>
+							<Person
+								name={this.state.persons[1].name}
+								age={this.state.persons[1].age}
+								click={this.switchNameHandler.bind(this, 'Max!')}
+								changed={this.nameChangedHandler}>My Hobbies: racing</Person>
 
-				<Person
-					name={this.state.persons[2].name}
-					age={this.state.persons[2].age} />
+							<Person
+								name={this.state.persons[2].name}
+								age={this.state.persons[2].age} />
+						</section>
+					: null
+				}
 
 				
 				<UserInput
@@ -109,13 +120,11 @@ class App extends Component {
 					reset={this.returnUsernameToDefault} />
 
 				<UserOutput
-					style={textStyles}
 					username={this.state.texts[0].username}
 					title={this.state.texts[0].title}
 					description={this.state.texts[0].description} />
 
 				<UserOutput
-					style={textStyles}
 					username={this.state.texts[1].username}
 					title={this.state.texts[1].title}
 					description={this.state.texts[1].description} />
